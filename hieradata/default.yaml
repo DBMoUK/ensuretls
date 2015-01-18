@@ -1,0 +1,2 @@
+---
+profiles::ensuretls::encryptionmode: 'TLSv1'
