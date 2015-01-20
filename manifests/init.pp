@@ -41,6 +41,7 @@ class ensuretls (
 inherits ensuretls::params {
 
   $confpath='/etc/puppetlabs/httpd/conf.d'
+  $protocol = split($encryptionmode,' ')
 
   File_line {
     line   => $encryptionmode,
@@ -58,6 +59,13 @@ inherits ensuretls::params {
 
   file_line {'puppetdashboard.conf':
     path => "${confpath}/puppetdashboard.conf",
+  }
+
+  pe_ini_setting {'puppetdb_tlsmode':
+    path    => '/etc/puppetlabs/puppetdb/conf.d/jetty.ini',
+    section => 'ssl-host',
+    setting => 'ssl-protocols',
+    value   => $protocol[-1],
   }
 
 }
