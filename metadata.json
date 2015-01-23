@@ -1,12 +1,12 @@
 {
-  "name": "dbmo-ensuretlsv1",
+  "name": "dbmo-ensuretls",
   "version": "0.1.0",
   "author": "David Bryant-Moore",
   "summary": "Security Compliance Module Ensuring TLSv1 Data Exchange Between Puppet Components",
   "license": "Apache 2.0",
-  "source": "https://github.com/DBMoUK/ensuretlsv1",
-  "project_page": "https://github.com/DBMoUK/ensuretlsv1",
-  "issues_url": "https://github.com/DBMoUK/ensuretlsv1/issues",
+  "source": "https://github.com/DBMoUK/ensuretls",
+  "project_page": "https://github.com/DBMoUK/ensuretls",
+  "issues_url": "https://github.com/DBMoUK/ensuretls/issues",
   "dependencies": [
     {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
   ]
