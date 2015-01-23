@@ -1,4 +1,4 @@
-# ensuretls
+# ensuretlsv1
 
 #### Table of Contents
 
@@ -23,7 +23,7 @@ This module should be classified against Puppet Master nodes only.  The module s
 
 ## Setup
 
-Puppet Master nodes may be classified with profile: profiles::ensuretls.
+Puppet Master nodes may be classified with profile: profiles::ensuretlsv1.
 After initial classification, each Puppet Master node must have the Puppet Master service pe-puppet restarted.  This only needs to be done once. 
    
 ### What ensuretlsv1 affects
@@ -34,7 +34,7 @@ ssl.conf
 puppetdashboard.conf
 puppetproxy.conf
 
-The SSLProtocol configuration directive is changed to TLSv1, following classification of a Puppet Master node with the ensuretls profile.
+The SSLProtocol configuration directive is changed to TLSv1, following classification of a Puppet Master node with the ensuretlsv1 profile.
 
 ### Setup Requirements **OPTIONAL**
 
@@ -42,7 +42,7 @@ None.
 
 ### Beginning with ensuretlsv1
 
-Classify each Puppet Master node with: profiles::enabletls
+Classify each Puppet Master node with: profiles::enabletlsv1
 
 ## Usage
 

@@ -1,0 +1,160 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: "<DOCKER_HOST>/v1.15/images/create?fromImage=debian%3Awheezy"
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Swipely/Docker-API 1.15.0
+      Content-Type:
+      - text/plain
+  response:
+    status:
+      code: 200
+      message: 
+    headers:
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 01 Dec 2014 18:08:47 GMT
+    body:
+      encoding: UTF-8
+      string: "{\"status\":\"The image you are pulling has been verified\",\"id\":\"debian:wheezy\"}\r\n{\"status\":\"Already
+        exists\",\"progressDetail\":{},\"id\":\"511136ea3c5a\"}{\"status\":\"Already
+        exists\",\"progressDetail\":{},\"id\":\"f10807909bc5\"}{\"status\":\"Already
+        exists\",\"progressDetail\":{},\"id\":\"f6fab3b798be\"}{\"status\":\"Status:
+        Image is up to date for debian:wheezy\"}\r\n"
+    http_version: 
+  recorded_at: Mon, 01 Dec 2014 18:08:47 GMT
+- request:
+    method: post
+    uri: "<DOCKER_HOST>/v1.15/containers/create"
+    body:
+      encoding: UTF-8
+      string: '{"Image":"f6fab3b798be","Cmd":["ls","/lib64/"]}'
+    headers:
+      User-Agent:
+      - Swipely/Docker-API 1.15.0
+      Content-Type:
+      - application/json
+  response:
+    status:
+      code: 201
+      message: 
+    headers:
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 01 Dec 2014 18:08:47 GMT
+      Content-Length:
+      - '90'
+    body:
+      encoding: UTF-8
+      string: |
+        {"Id":"3437665a25de15bc5af05f15c05ecf49c481e424d85ffadbf1a4911e01f6217a","Warnings":null}
+    http_version: 
+  recorded_at: Mon, 01 Dec 2014 18:08:47 GMT
+- request:
+    method: post
+    uri: "<DOCKER_HOST>/v1.15/containers/3437665a25de15bc5af05f15c05ecf49c481e424d85ffadbf1a4911e01f6217a/start"
+    body:
+      encoding: UTF-8
+      string: "{}"
+    headers:
+      User-Agent:
+      - Swipely/Docker-API 1.15.0
+      Content-Type:
+      - application/json
+  response:
+    status:
+      code: 204
+      message: 
+    headers:
+      Date:
+      - Mon, 01 Dec 2014 18:08:48 GMT
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Mon, 01 Dec 2014 18:08:48 GMT
+- request:
+    method: get
+    uri: "<DOCKER_HOST>/v1.15/containers/3437665a25de15bc5af05f15c05ecf49c481e424d85ffadbf1a4911e01f6217a/logs?stdout=true"
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Swipely/Docker-API 1.15.0
+      Content-Type:
+      - text/plain
+  response:
+    status:
+      code: 200
+      message: 
+    headers:
+      Date:
+      - Mon, 01 Dec 2014 18:08:48 GMT
+      Content-Type:
+      - application/octet-stream
+    body:
+      encoding: UTF-8
+      string: !binary |-
+        AQAAAAAAABVsZC1saW51eC14ODYtNjQuc28uMgo=
+    http_version: 
+  recorded_at: Mon, 01 Dec 2014 18:08:48 GMT
+- request:
+    method: post
+    uri: "<DOCKER_HOST>/v1.15/containers/3437665a25de15bc5af05f15c05ecf49c481e424d85ffadbf1a4911e01f6217a/wait"
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Swipely/Docker-API 1.15.0
+      Content-Type:
+      - text/plain
+  response:
+    status:
+      code: 200
+      message: 
+    headers:
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 01 Dec 2014 18:08:48 GMT
+      Content-Length:
+      - '17'
+    body:
+      encoding: UTF-8
+      string: |
+        {"StatusCode":0}
+    http_version: 
+  recorded_at: Mon, 01 Dec 2014 18:08:48 GMT
+- request:
+    method: delete
+    uri: "<DOCKER_HOST>/v1.15/containers/3437665a25de15bc5af05f15c05ecf49c481e424d85ffadbf1a4911e01f6217a"
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Swipely/Docker-API 1.15.0
+      Content-Type:
+      - text/plain
+  response:
+    status:
+      code: 204
+      message: 
+    headers:
+      Date:
+      - Mon, 01 Dec 2014 18:08:48 GMT
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Mon, 01 Dec 2014 18:08:48 GMT
+recorded_with: VCR 2.9.3

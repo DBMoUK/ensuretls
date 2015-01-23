@@ -1,0 +1,129 @@
+2014-10-01 - Release 0.8.2
+Summary:
+This release fixes the lint task on the latest puppet-lint
+
+Bugfixes:
+- Fix the lint task require code
+
+2014-08-25 - Release 0.8.1
+Summary:
+This release corrects compatibility with the recently-released puppet-lint
+1.0.0
+
+Bugfixes:
+- Turn on relative autoloader lint checking for backwards-compatibility
+- Turn off param class inheritance check (deprecated style)
+- Fix ignore paths to ignore pkg/*
+
+2014-07-29 - Release 0.8.0
+Summary:
+This release uses the new puppet-syntax gem to perform manifest validation
+better than before! Shiny.
+
+Features:
+- Use puppet-syntax gem for manifest validation rake task
+
+Bugfixes:
+- Fix compatibility with rspec 3
+
+2014-07-17 - Release 0.7.0
+Summary:
+This feature release adds the ability to test structured facts, manifest
+ordering, and trusted node facts, and check out branches with fixtures.
+
+Features:
+- Add `STRINGIFY_FACTS=no` for structured facts
+- Add `TRUSTED_NODE_DATA=yes` for trusted node data
+- Add `ORDERING=<order>` for manifest ordering
+- Add `:branch` support for fixtures on a branch.
+
+Bugfixes:
+- Fix puppet-lint to ignore spec/fixtures/
+
+2014-07-02 - Release 0.6.0
+Summary:
+This feature release adds the `validate` rake task and the ability to test
+strict variables and the future parser with rspec-puppet.
+
+Features:
+- Add `validate` rake task.
+- Add `STRICT_VARIABLES=yes` to module_spec_helper
+- Add `FUTURE_PARSER=yes` to module_spec_helper
+
+Bugfixes:
+- Avoid conflict with Object.clone
+- Install forge fixtures without conflicting with already-installed modules
+
+2014-06-19 - Release 0.5.2
+Summary:
+This release removes the previously non-existant puppet runtime dependency to
+better match rspec-puppet and puppet-lint and allow system puppet packages to
+be used instead of gems.
+
+Bugfixes:
+- Remove puppet dependency from gemspec
+
+2014-06-09 - Release 0.5.1
+Summary:
+This release re-adds mocha mocking, which was mistakenly removed in 0.5.0
+
+Bugfixes:
+- Re-enable mocha mocking as default.
+
+2014-06-06 - Release 0.5.0
+Summary:
+This is the first feature release in over a year. The biggest feature is fixtures supporting the forge, and not just github, plus rake tasks for syntax checking and beaker.
+
+Features:
+- Install modules from the forge, not just git
+- Beaker rake tasks added
+- Syntax task added
+- Rake spec runs tests in `integration/` directory
+
+Bugfixes:
+- Fix the gemspec so that this may be used with bundler
+- Fix removal of symlinks
+- Fix removal of site.pp only when empty
+- Ignore fixtures for linting
+- Remove extra mocha dependency
+- Remove rspec pinning (oops)
+
+2014-06-06 - Release 0.4.2
+
+Summary:
+This release corrects the pinning of rspec for modules which are not rspec 3
+compatible yet.
+
+Bugfixes:
+* Pin to 2.x range for rspec 2
+* Fix aborting rake task when packaging gem
+* Fix puppet issue tracker url
+* Fix issue with running `git reset` in the incorrect dir
+
+2013-02-08 Puppet Labs <info@puppetlabs.com> - 0.4.1
+ * (#18165) Mark tests pending on broken puppet versions
+ * (#18165) Initialize TestHelper as soon as possible
+ * Maint: Change formatting and handle windows path separator
+
+2012-12-14 Puppet Labs <info@puppetlabs.com> - 0.4.0
+ * Rake should fail if git can't clone repository
+ * Add readme for fixtures
+ * Fix Mocha deprecations
+ * add opts logic to rake spec_clean
+ * add backwards-compatible support for arbitrary git refs in .fixtures.yml
+ * Only remove the site.pp if it is empty
+ * (#15464) Make contributing easy via bundle Gemfile
+ * (#15464) Add gemspec from 0.3.0 published gem
+
+2012-08-14 Puppet Labs <info@puppetlabs.com> - 0.3.0
+ * Add PuppetInternals compatibility module for
+   scope, node, compiler, and functions
+ * Add rspec-puppet convention directories to rake tasks
+
+2012-07-05 Puppet Labs <info@puppetlabs.com> - 0.2.0
+ * Fix integration with mocha-0.12.0
+ * Fix coverage rake task
+ * Fix an issue creating the fixtures directory
+
+2012-06-08 Puppet Labs <info@puppetlabs.com> - 0.1.0
+ * Initial release
