@@ -1,4 +1,0 @@
----
-fixtures:
-  repositories:
-    peinifile: "git://github.com/puppetlabs/puppetlabs-pe_inifile.git"

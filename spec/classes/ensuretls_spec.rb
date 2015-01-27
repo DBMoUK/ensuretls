@@ -8,9 +8,7 @@ describe 'ensuretls class' do
       tmpdir = default.tmpdir('ensuretls')
       pp = <<-EOS
         class { 'ensuretls':
-          (
-             $encryptionmode = $ensuretls::params::encryptionmode
-          )
+          ( encryptionmode => $ensuretls::params::encryptionmode )
           inherits ensuretls::params {
 
           $confpath='/etc/puppetlabs/httpd/conf.d'

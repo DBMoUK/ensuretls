@@ -1,43 +1,53 @@
 require 'beaker-rspec'
+require 'beaker-rspec/helpers/serverspec'
 
 UNSUPPORTED_PLATFORMS = [ 'Windows', 'Solaris', 'AIX' ]
 
-unless ENV['RS_PROVISION'] == 'no' or ENV['BEAKER_provision'] == 'no'
-  # This will install the latest available package on el and deb based
-  # systems fail on windows and osx, and install via gem on other *nixes
-  foss_opts = { :default_action => 'gem_install' }
+distmoduledir = [ '/etc/puppet/modules/puppet_enterprise','/etc/puppet/modules/ensuretls' ]
 
-  if default.is_pe?; then install_pe; else install_puppet( foss_opts ); end
-
+unless ENV['RS_PROVISION'] == 'no'
   hosts.each do |host|
-    on hosts, "mkdir -p #{host['distmoduledir']}"
+    # Install Puppet
+    if host.is_pe?
+      install_pe
+    else
+      # Configure the puppetlabs yum repo
+      on host, "rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm"
+      on host, "yum-config-manager --enable puppetlabs"
+      on host, "yum-config-manager --enable centosplus"
+      on host, "yum-config-manager --enable epel"
+      # Install the puppet rpm
+      install_puppet
+      distmoduledir.each do |distmoduledir|
+        on host, "mkdir -p #{host['distmoduledir']}"
+      end
+    end
   end
 end
 
 RSpec.configure do |c|
   # Project root
-  proj_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+  #proj_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+
+  proj_root1 = '/Users/davidbryant-moore/Projects/puppetlabs-pe_inifile'
+  proj_root2 = '/Users/davidbryant-moore/Projects/ensuretls'
+  proj_root3 = '/Users/davidbryant-moore/Projects/puppet_enterprise'
 
   # Readable test descriptions
   c.formatter = :documentation
 
   # Configure all nodes in nodeset
   c.before :suite do
-    # Install module and dependencies
-    puppet_module_install(:source => proj_root, :module_name => 'mysql')
-    hosts.each do |host|
-      # Required for binding tests.
-      if fact('osfamily') == 'RedHat'
-        version = fact("operatingsystemmajrelease")
-        shell("yum localinstall -y http://yum.puppetlabs.com/puppetlabs-release-el-#{version}.noarch.rpm")
-        if fact('operatingsystemmajrelease') =~ /7/ || fact('operatingsystem') =~ /Fedora/
-          shell("yum install -y bzip2")
-        end
-      end
+    # Install module
+   copy_root_module_to(:host, :source => proj_root1, :module_name => 'pe_inifile')
+   copy_root_module_to(:host, :source => proj_root3, :module_name => 'puppet_enterprise')
 
-      shell("/bin/touch #{default['puppetpath']}/hiera.yaml")
-      on host, puppet('module install puppetlabs-stdlib --version 3.2.0'), { :acceptable_exit_codes => [0,1] }
-      on host, puppet('module','install','stahnma/epel'), { :acceptable_exit_codes => [0,1] }
+   puppet_module_install(:source => proj_root1, :module_name => ['puppetlabs-pe_inifile'])
+   puppet_module_install(:source => proj_root3, :module_name => ['puppet_enterprise'])
+   puppet_module_install(:source => proj_root2, :module_name => ['ensuretls'])
+
+    hosts.each do |host|
+      on host, puppet('module','install','puppetlabs-stdlib'), { :acceptable_exit_codes => [0,1] }
     end
   end
 end

@@ -1,6 +1,8 @@
 require 'puppetlabs_spec_helper/module_spec_helper'
 require 'puppet_facts'
+require 'pe_inifile'
 include PuppetFacts
+include Pe_inifile
 RSpec.configure do |c|
   c.formatter = :documentation
 end

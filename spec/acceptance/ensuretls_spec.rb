@@ -6,7 +6,6 @@ describe 'ensuretls class' do
     # Using puppet_apply as a helper
     it 'should work with no errors' do
       pp = <<-EOS
-      require pe_inifile
       class { 'ensuretls': 
         encryptionmode => 'SSLProtocol TLSv1',
       }

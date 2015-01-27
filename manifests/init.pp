@@ -46,7 +46,7 @@ inherits ensuretls::params {
   File_line {
     line   => $encryptionmode,
     ensure => present,
-    match  => "^\\s+SSLProtocol\\s+",
+    match  => "^\\s+SSLProtocol\\s+.*",
   }
 
   file_line {'ssl.conf':
