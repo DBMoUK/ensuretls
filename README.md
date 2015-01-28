@@ -19,7 +19,7 @@ This module secures encrypted communication between Puppet Master and Agents to 
 
 ## Module Description
 
-This module should be classified against Puppet Master nodes only.  The module sshould not be installed on Puppet Agent nodes.
+The classes contained in this module should be classified against Puppet CA and PuppetDB nodes only, respectively, in a Split-Install implementation.  An All-In-One Master may be classified with both classes.   The module sshould not be installed on Puppet Agent nodes.
 
 ## Setup
 
