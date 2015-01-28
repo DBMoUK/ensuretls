@@ -1,4 +1,4 @@
-# ensuretls
+# Module ensuretls
 
 #### Table of Contents
 
@@ -19,15 +19,15 @@ This module secures encrypted communication between Puppet Master and Agents to 
 
 ## Module Description
 
-The classes contained in this module should be classified against Puppet CA and PuppetDB nodes only, respectively, in a Split-Install implementation.  An All-In-One Master may be classified with both classes.   The module sshould not be installed on Puppet Agent nodes.
+The classes contained in this module should be classified against Puppet Console and PuppetDB nodes only, respectively, in a Split-Install implementation.  An All-In-One Master may be classified with both classes.   The module should not be installed on Puppet Agent nodes.
 
 ## Setup
 
-Puppet Master CA node may be classified with profile: profile::ensuretls::console
+Puppet Master Console node may be classified with profile: profile::ensuretls::console
 
 PuppetDB Node may be classified with profile: profile::ensuretls::db
 
-After classification, the node appropriate service is notified of the changes: pe-httpd on the CA node, and pe-puppetdb on the DB node.  
+After classification, the node appropriate service is notified of the changes: pe-httpd on the Console node, and pe-puppetdb on the DB node.  
  
 ### What ensuretls::console affects
 
@@ -52,13 +52,19 @@ None.
 
 ### Beginning with ensuretls
 
-Classify Puppet CA node with: profile::enabletls::console
+In a Split-Install implementation:
+
+Classify Puppet Console node with: profile::enabletls::console
 
 Classify PuppetDB node with: profile::enabletls::db
 
+In an All-In-One implementation:
+
+Classify Puppet Master with: profile::enabletls::console and profile::enabletls::db
+
 ## Usage
 
-Please see example profile in: ensuretls/profile/ensuretls/manifests for application of the ensuretls::console and ensuretls::db classes by profile to the Puppet Master nodes.
+Please see example profile in: ensuretls/profile/ensuretls/manifests for application of the ensuretls::console and ensuretls::db classes by profile to the appropriate Puppet nodes.
 
 Note that the following hiera data items will need to be migrated into the appropriate hiera data file.
 
@@ -66,7 +72,9 @@ profile::ensuretls::encryptionmode: 'SSLProtocol TLSv1'
 'puppet_enterprise::profile::amq::broker::stomp_transport_options':
   'transport.enabledProtocols': 'TLSv1'
 
-The hiera hash: puppet_enterprise::profile::amq::broker::stomp_transport_options ensures that MCollective operates using TLSv1 ciphers exclusively.
+The hiera hash: puppet_enterprise::profile::amq::broker::stomp_transport_options ensures that MCollective operates using TLSv1 ciphers exclusively.  This hiera data item must be available on the Puppet Master which serves the MCollective Agent process.
+
+Please note, after making changes to Hiera, the Puppet Master hosting Hiera needs to have the pe-puppet service restarted in order for the changes to becoe available to Puppet.
 
 
 An example default.yaml file containing these data items can be found in hieradata/defaults.yaml within this module.
