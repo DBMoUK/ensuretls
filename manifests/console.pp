@@ -1,4 +1,4 @@
-# == Class: ensuretlsv
+# == Class: ensuretls::console
 #
 # Ensure communication between Master & Agent components secured over TLSv1.
 #
@@ -23,7 +23,7 @@
 #
 # === Examples
 #
-#  class { 'ensuretlsv':
+#  class { 'ensuretls::console':
 #    servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
 #  }
 #
@@ -35,13 +35,12 @@
 #
 # Copyright 2015 Puppetlabs.
 #
-class ensuretls (
+class ensuretls::console (
   $encryptionmode = $ensuretls::params::encryptionmode
 )
 inherits ensuretls::params {
 
   $confpath='/etc/puppetlabs/httpd/conf.d'
-  $protocol = split($encryptionmode,' ')
 
   File_line {
     line   => $encryptionmode,
@@ -49,23 +48,23 @@ inherits ensuretls::params {
     match  => "^\\s+SSLProtocol\\s+",
   }
 
+  service { 'pe-httpd':
+    ensure => running,
+    enable => true,
+  }
+
   file_line {'ssl.conf':
-    path  => "${confpath}/ssl.conf",
+    path   => "${confpath}/ssl.conf",
+    notify => Service['pe-httpd'],
   }
 
   file_line {'puppetproxy.conf':
-    path => "${confpath}/puppetproxy.conf",
+    path   => "${confpath}/puppetproxy.conf",
+    notify => Service['pe-httpd'],
   }
 
   file_line {'puppetdashboard.conf':
-    path => "${confpath}/puppetdashboard.conf",
+    path   => "${confpath}/puppetdashboard.conf",
+    notify => Service['pe-httpd'],
   }
-
-  pe_ini_setting {'puppetdb_tlsmode':
-    path    => '/etc/puppetlabs/puppetdb/conf.d/jetty.ini',
-    section => 'ssl-host',
-    setting => 'ssl-protocols',
-    value   => $protocol[-1],
-  }
-
 }

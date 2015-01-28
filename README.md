@@ -1,4 +1,4 @@
-# ensuretlsv1
+# ensuretls
 
 #### Table of Contents
 
@@ -23,10 +23,13 @@ This module should be classified against Puppet Master nodes only.  The module s
 
 ## Setup
 
-Puppet Master nodes may be classified with profile: profiles::ensuretlsv1.
-After initial classification, each Puppet Master node must have the Puppet Master service pe-puppet restarted.  This only needs to be done once. 
-   
-### What ensuretlsv1 affects
+Puppet Master CA node may be classified with profile: profile::ensuretls::console
+
+PuppetDB Node may be classified with profile: profile::ensuretls::db
+
+After classification, the node appropriate service is notified of the changes: pe-httpd on the CA node, and pe-puppetdb on the DB node.  
+ 
+### What ensuretls::console affects
 
 The module affects the following files in: /etc/puppetlabs/httpd/conf.d
 
@@ -34,9 +37,11 @@ ssl.conf
 puppetdashboard.conf
 puppetproxy.conf
 
-The SSLProtocol configuration directive is changed to TLSv1, following classification of a Puppet Master node with the ensuretlsv1 profile.
+The SSLProtocol configuration directive is changed to TLSv1, following classification of a Puppet Master node with the ensuretls::console profile.
 
-Additionally, /etc/puppetlabs/puppetdb/conf.d/jetty.ini
+### What ensuretls::db affects
+
+/etc/puppetlabs/puppetdb/conf.d/jetty.ini
 
 A new section is added to the file to ensure the TLSv1 protocol is used when communicating with PuppetDB.
 
@@ -45,23 +50,26 @@ A new section is added to the file to ensure the TLSv1 protocol is used when com
 
 None.
 
-### Beginning with ensuretlsv1
+### Beginning with ensuretls
 
-Classify each Puppet Master node with: profiles::enabletlsv1, ensure hiera data element examples in hieradata/default.yaml are migrated into the appropriate hiera file in your infrastructure.
+Classify Puppet CA node with: profile::enabletls::console
 
-Note:  
-
-'puppet_enterprise::profile::amq::broker::stomp_transport_options':
-  'transport.enabledProtocols': 'TLSv1'
-
-Is utilised by the puppet_enterprise::profile::amq::broker class to lock down MCollective communication to TLSv1.
-
+Classify PuppetDB node with: profile::enabletls::db
 
 ## Usage
 
-Please see example profile in: profile/ensuretls/manifests/init.pp for application of the ensuretls class by profile to the Puppet Master nodes.
+Please see example profile in: ensuretls/profile/ensuretls/manifests for application of the ensuretls::console and ensuretls::db classes by profile to the Puppet Master nodes.
 
-Additionally, please see example hieradata in hieradata/defaults.yaml
+Note that the following hiera data items will need to be migrated into the appropriate hiera data file.
+
+profile::ensuretls::encryptionmode: 'SSLProtocol TLSv1'
+'puppet_enterprise::profile::amq::broker::stomp_transport_options':
+  'transport.enabledProtocols': 'TLSv1'
+
+The hiera hash: puppet_enterprise::profile::amq::broker::stomp_transport_options ensures that MCollective operates using TLSv1 ciphers exclusively.
+
+
+An example default.yaml file containing these data items can be found in hieradata/defaults.yaml within this module.
 
 ## Reference
 

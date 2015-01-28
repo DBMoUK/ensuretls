@@ -1,0 +1,2 @@
+class{ 'ensuretls::console':}
+
