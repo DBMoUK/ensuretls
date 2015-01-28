@@ -1,2 +1,2 @@
 ---
-profiles::ensuretls::encryptionmode: 'TLSv1'
+profile::ensuretls::encryptionmode: 'SSLProtocol TLSv1'

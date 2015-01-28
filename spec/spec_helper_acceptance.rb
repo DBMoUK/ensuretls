@@ -32,7 +32,7 @@ RSpec.configure do |c|
   proj_root1 = '/Users/davidbryant-moore/Projects/puppetlabs-pe_inifile'
   proj_root2 = '/Users/davidbryant-moore/Projects/ensuretls'
   proj_root3 = '/Users/davidbryant-moore/Projects/puppet_enterprise'
-
+  proj_root4 = '/Users/davidbryant-moore/Projects/puppet_stdlib'
   # Readable test descriptions
   c.formatter = :documentation
 
@@ -45,7 +45,7 @@ RSpec.configure do |c|
    puppet_module_install(:source => proj_root1, :module_name => ['puppetlabs-pe_inifile'])
    puppet_module_install(:source => proj_root3, :module_name => ['puppet_enterprise'])
    puppet_module_install(:source => proj_root2, :module_name => ['ensuretls'])
-
+   puppet_module_install(:source => proj_root2, :module_name => ['stdlib'])
     hosts.each do |host|
       on host, puppet('module','install','puppetlabs-stdlib'), { :acceptable_exit_codes => [0,1] }
     end

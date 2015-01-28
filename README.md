@@ -36,6 +36,11 @@ puppetproxy.conf
 
 The SSLProtocol configuration directive is changed to TLSv1, following classification of a Puppet Master node with the ensuretlsv1 profile.
 
+Additionally, /etc/puppetlabs/puppetdb/conf.d/jetty.ini
+
+A new section is added to the file to ensure the TLSv1 protocol is used when communicating with PuppetDB.
+
+
 ### Setup Requirements **OPTIONAL**
 
 None.
@@ -45,6 +50,10 @@ None.
 Classify each Puppet Master node with: profiles::enabletlsv1
 
 ## Usage
+
+Please see example profile in: profile/ensuretls/manifests/init.pp for application of the ensuretls class by profile to the Puppet Master nodes.
+
+Additionally, please see example hieradata in hieradata/defaults.yaml
 
 ## Reference
 

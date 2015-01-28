@@ -1,11 +1,7 @@
 ---
 fixtures:
   repositories:
-    "puppetlabs-pe_inifile":
-       "repo": "https://github.com/puppetlabs/puppetlabs-pe_inifile"
-  symlinks:
-    "apt": "#(source_dir)"
     "puppetlabs-stdlib":
        "repo": "https://github.com/puppetlabs/puppetlabs-stdlib"
   symlinks:
-    "apt": "#(source_dir)" 
+    "apt": "#(source_dir)"
