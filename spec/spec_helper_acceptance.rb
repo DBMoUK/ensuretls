@@ -1,5 +1,6 @@
 require 'beaker-rspec'
 require 'beaker-rspec/helpers/serverspec'
+require 'spec_helper'
 
 UNSUPPORTED_PLATFORMS = [ 'Windows', 'Solaris', 'AIX' ]
 

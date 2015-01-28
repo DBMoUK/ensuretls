@@ -1,4 +1,0 @@
----
-profile::ensuretls::encryptionmode: 'SSLProtocol TLSv1'
-'puppet_enterprise::profile::amq::broker::stomp_transport_options':
-  'transport.enabledProtocols': 'TLSv1'

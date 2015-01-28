@@ -1,3 +1,3 @@
 class ensuretls::params {
-  $encryptionmode = hiera('profile::ensuretls::encryptionmode',{})
+  $encryptionmode = 'SSLProtocol TLSv1' 
 }
