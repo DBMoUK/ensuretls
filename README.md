@@ -47,7 +47,15 @@ None.
 
 ### Beginning with ensuretlsv1
 
-Classify each Puppet Master node with: profiles::enabletlsv1
+Classify each Puppet Master node with: profiles::enabletlsv1, ensure hiera data element examples in hieradata/default.yaml are migrated into the appropriate hiera file in your infrastructure.
+
+Note:  
+
+'puppet_enterprise::profile::amq::broker::stomp_transport_options':
+  'transport.enabledProtocols': 'TLSv1'
+
+Is utilised by the puppet_enterprise::profile::amq::broker class to lock down MCollective communication to TLSv1.
+
 
 ## Usage
 
