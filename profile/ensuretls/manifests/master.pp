@@ -1,4 +1,4 @@
-# == Class: profiles::ensuretls::db
+# == Class: profile::ensuretlsv::console
 #
 # Ensure communication between Master & Agent components secured over TLSv1.
 #
@@ -23,7 +23,7 @@
 #
 # === Examples
 #
-#  class { 'profiles::ensuretls::db':
+#  class { 'profile::ensuretlsv::console':
 #    servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
 #  }
 #
@@ -35,24 +35,34 @@
 #
 # Copyright 2015 Puppetlabs.
 #
-class profiles::ensuretls::db (
-  $encryptionmode = $profiles::ensuretls::params::encryptionmode
+class profile::ensuretls::console (
+  $encryptionmode = $ensuretls::console::params::encryptionmode
 )
-inherits profiles::ensuretls::params {
+inherits profile::ensuretls::params {
 
-  $protocol = split($encryptionmode,' ')
+  $confpath='/etc/puppetlabs/httpd/conf.d'
 
-  service { 'pe-puppetdb':
+  File_line {
+    line   => $encryptionmode,
+    ensure => present,
+    match  => "^\\s+SSLProtocol\\s+",
+    notify => Service['pe-httpd'],
+  }
+
+  service { 'pe-httpd':
     ensure => running,
     enable => true,
   }
 
-  pe_ini_setting {'puppetdb_tlsmode':
-    path    => '/etc/puppetlabs/puppetdb/conf.d/jetty.ini',
-    section => 'ssl-host',
-    setting => 'ssl-protocols',
-    value   => $protocol[-1],
-    notify  => Service ['pe-puppetdb'],
+  file_line {'ssl.conf':
+    path  => "${confpath}/ssl.conf",
   }
 
+  file_line {'puppetproxy.conf':
+    path => "${confpath}/puppetproxy.conf",
+  }
+
+  file_line {'puppetdashboard.conf':
+    path => "${confpath}/puppetdashboard.conf",
+  }
 }

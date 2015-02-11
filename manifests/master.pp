@@ -1,4 +1,4 @@
-# == Class: profiles::ensuretls::db
+# == Class: ensuretls::master
 #
 # Ensure communication between Master & Agent components secured over TLSv1.
 #
@@ -23,7 +23,7 @@
 #
 # === Examples
 #
-#  class { 'profiles::ensuretls::db':
+#  class { 'ensuretls::master':
 #    servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
 #  }
 #
@@ -35,24 +35,29 @@
 #
 # Copyright 2015 Puppetlabs.
 #
-class profiles::ensuretls::db (
-  $encryptionmode = $profiles::ensuretls::params::encryptionmode
+class ensuretls::master (
+  $jvmencryptionmode = $ensuretls::params::jvmencryptionmode
 )
-inherits profiles::ensuretls::params {
+inherits ensuretls::params {
 
-  $protocol = split($encryptionmode,' ')
+  $templatepath='/opt/puppet/share/puppet/modules/puppet_enterprise/templates/master/puppetserver/'
 
-  service { 'pe-puppetdb':
-    ensure => running,
-    enable => true,
+  File_line {
+    line   => $jvmencryptionmode,
+    ensure => present,
+    match  => "^\\s+ssl-protocol\\s+",
   }
 
-  pe_ini_setting {'puppetdb_tlsmode':
-    path    => '/etc/puppetlabs/puppetdb/conf.d/jetty.ini',
-    section => 'ssl-host',
-    setting => 'ssl-protocols',
-    value   => $protocol[-1],
-    notify  => Service ['pe-puppetdb'],
+  service { 'pe-puppetserver':
+    ensure => running,
+  }
+
+  file_line {'webserver.conf':
+    path   => "${templatepath}/webserver.conf.erb",
+    line   => $jvmencryptionmode, 
+    ensure => present,
+    match  => "^\\s+ssl-pprotocols\\s+"
+    notify => Service['pe-puppetserver'],
   }
 
 }
