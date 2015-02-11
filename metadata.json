@@ -1,6 +1,6 @@
 {
   "name": "ensuretls",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "David Bryant-Moore",
   "summary": "Security Compliance Module Ensuring TLSv1 Data Exchange Between Puppet Components",
   "license": "Apache 2.0",

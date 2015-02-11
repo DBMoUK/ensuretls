@@ -45,6 +45,14 @@ The SSLProtocol configuration directive is changed to TLSv1, following classific
 
 A new section is added to the file to ensure the TLSv1 protocol is used when communicating with PuppetDB.
 
+### What ensuretls::master affects
+
+/opt/puppet/share/puppet/modules/puppet_enterprise/templates/master/puppetserver/webserver.conf.erb
+
+A new directive is added to the file to lock down Master <--> Agent communication to TLSv1.
+
+Patching the source template for webserver.conf.erb is an interim measure until
+Engineering @ Puppetlabs release an official fix for this requirement.
 
 ### Setup Requirements **OPTIONAL**
 
@@ -54,13 +62,19 @@ None.
 
 In a Split-Install implementation:
 
-Classify Puppet Console node with: profile::enabletls::console
+Classify Puppet Console node with: profile::ensuretls::console
 
-Classify PuppetDB node with: profile::enabletls::db
+Classify PuppetDB node with: profile::ensuretls::db
+
+Classify All Master nodes [Master of Masters & Compile Masters] 
+with profile: profile::ensuretls::master
 
 In an All-In-One implementation:
 
-Classify Puppet Master with: profile::enabletls::console and profile::enabletls::db
+Classify Puppet Master with: 
+profile::ensuretls::console
+profile::ensuretls::db
+profile::ensuretls::master
 
 ## Usage
 
@@ -69,6 +83,7 @@ Please see example profile in: ensuretls/profile/ensuretls/manifests for applica
 Note that the following hiera data items will need to be migrated into the appropriate hiera data file.
 
 profile::ensuretls::encryptionmode: 'SSLProtocol TLSv1'
+profile::ensuretls::jvmencryptionmode: 'ssl-protocol: TLSv1'
 'puppet_enterprise::profile::amq::broker::stomp_transport_options':
   'transport.enabledProtocols': 'TLSv1'
 
