@@ -47,7 +47,7 @@ inherits ensuretls::params {
   File_line {
     line   => $jvmencryptionmode,
     ensure => present,
-    match  => "^\\s+ssl-protocols\\s+",
+    #match  => "^\\s+ssl-protocols\\s+",
   }
 
   file_line {'webserver.conf':
