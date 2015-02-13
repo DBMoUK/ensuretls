@@ -40,24 +40,26 @@ class ensuretls::master (
 )
 inherits ensuretls::params {
 
+  include stdlib
+
   $templatepath='/opt/puppet/share/puppet/modules/puppet_enterprise/templates/master/puppetserver/'
 
   File_line {
     line   => $jvmencryptionmode,
     ensure => present,
-    match  => "^\\s+ssl-protocol\\s+",
-  }
-
-  service { 'pe-puppetserver':
-    ensure => running,
+    match  => "^\\s+ssl-protocols\\s+",
   }
 
   file_line {'webserver.conf':
     path   => "${templatepath}/webserver.conf.erb",
-    line   => $jvmencryptionmode, 
-    ensure => present,
-    match  => "^\\s+ssl-pprotocols\\s+"
-    notify => Service['pe-puppetserver'],
+    after  => "^\\s+ssl-port\\s+:\\s+8140",
+    notify => Exec['restart-pe-puppetserver'],
+  }
+
+  exec { 'restart-pe-puppetserver':
+    command => 'service pe-puppetserver restart',
+    require => File_Line['webserver.conf'],
+    path    => '/sbin'
   }
 
 }

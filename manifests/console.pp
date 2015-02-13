@@ -40,31 +40,37 @@ class ensuretls::console (
 )
 inherits ensuretls::params {
 
+  include stdlib
+
   $confpath='/etc/puppetlabs/httpd/conf.d'
 
-  File_line {
+  #ensure_resource('service','Puppet_Enterprise::console::service::pe-httpd',{ 'ensure' => 'running' })
+
+  service { '::pe-httpd':
+    ensure => running,
+  }
+
+  pe_file_line {'ssl.conf':
     line   => $encryptionmode,
     ensure => present,
     match  => "^\\s+SSLProtocol\\s+",
-  }
-
-  service { 'pe-httpd':
-    ensure => running,
-    enable => true,
-  }
-
-  file_line {'ssl.conf':
     path   => "${confpath}/ssl.conf",
-    notify => Service['pe-httpd'],
+    notify => Service['::pe-httpd'],
   }
 
-  file_line {'puppetproxy.conf':
+  pe_file_line {'puppetproxy.conf':
+    line   => $encryptionmode,
+    ensure => present,
+    match  => "^\\s+SSLProtocol\\s+",
     path   => "${confpath}/puppetproxy.conf",
-    notify => Service['pe-httpd'],
+    notify => Service['::pe-httpd'],
   }
 
-  file_line {'puppetdashboard.conf':
+  pe_file_line {'puppetdashboard.conf':
+    line   => $encryptionmode,
+    ensure => present,
+    match  => "^\\s+SSLProtocol\\s+",
     path   => "${confpath}/puppetdashboard.conf",
-    notify => Service['pe-httpd'],
+    notify => Service['::pe-httpd'],
   }
 }

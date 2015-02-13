@@ -40,11 +40,6 @@ class ensuretls::db (
 )
 inherits ensuretls::params {
 
-  service { 'pe-puppetdb':
-    ensure => running,
-    enable => true,
-  }
-
   $protocol = split($encryptionmode,' ')
 
   pe_ini_setting {'puppetdb_tlsmode':
