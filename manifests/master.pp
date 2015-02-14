@@ -44,22 +44,23 @@ inherits ensuretls::params {
 
   $templatepath='/opt/puppet/share/puppet/modules/puppet_enterprise/templates/master/puppetserver/'
 
-  File_line {
+  file_line {'webserver.conf':
     line   => $jvmencryptionmode,
     ensure => present,
     #match  => "^\\s+ssl-protocols\\s+",
-  }
-
-  file_line {'webserver.conf':
     path   => "${templatepath}/webserver.conf.erb",
     after  => "^\\s+ssl-port\\s+:\\s+8140",
-    notify => Exec['restart-pe-puppetserver'],
+    #notify => Exec['restart-pe-puppetserver'],
+    provider => ensuretls,
   }
 
-  exec { 'restart-pe-puppetserver':
-    command => 'service pe-puppetserver restart',
-    require => File_Line['webserver.conf'],
-    path    => '/sbin'
-  }
+  ### We don't need to restart puppetserver because all we've changed in this run is the
+  ### template.  The actual config file won't get changed until the next agent run, and
+  ### when that happens the server will already get restarted.
+  #exec { 'restart-pe-puppetserver':
+    #command => 'service pe-puppetserver restart',
+    #require => File_Line['webserver.conf'],
+    #path    => '/sbin'
+  #}
 
 }
