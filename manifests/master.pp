@@ -47,7 +47,7 @@ inherits ensuretls::params {
   file_line {'webserver.conf':
     line   => $jvmencryptionmode,
     ensure => present,
-    #match  => "^\\s+ssl-protocols\\s+",
+    match  => "^\\s*ssl-protocols\\s*:",
     path   => "${templatepath}/webserver.conf.erb",
     after  => "^\\s+ssl-port\\s+:\\s+8140",
     #notify => Exec['restart-pe-puppetserver'],

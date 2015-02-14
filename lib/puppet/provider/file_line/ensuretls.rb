@@ -7,11 +7,16 @@ Puppet::Type.type(:file_line).provide(:ensuretls) do
   end
 
   def create
+    handled = false
     if resource[:match]
-      handle_create_with_match
-    elsif resource[:after]
-      handle_create_with_after
-    else
+      handled = handle_create_with_match
+    end
+
+    if (!handled) and resource[:after]
+      handled = handle_create_with_after
+    end
+
+    if !handled
       append_line
     end
   end
@@ -44,10 +49,11 @@ Puppet::Type.type(:file_line).provide(:ensuretls) do
         fh.puts(regex.match(l) ? resource[:line] : l)
       end
 
-      if (match_count == 0)
-        fh.puts(resource[:line])
-      end
+      #if (match_count == 0)
+        #fh.puts(resource[:line])
+      #end
     end
+    match_count > 0
   end
 
   def handle_create_with_after
@@ -68,6 +74,7 @@ Puppet::Type.type(:file_line).provide(:ensuretls) do
     else
       raise Puppet::Error, "#{count} lines match pattern '#{resource[:after]}' in file '#{resource[:path]}'.  One or no line must match the pattern."
     end
+    true
   end
 
   def count_matches(regex)
