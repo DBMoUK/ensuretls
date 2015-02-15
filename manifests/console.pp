@@ -46,31 +46,33 @@ inherits ensuretls::params {
 
   #ensure_resource('service','Puppet_Enterprise::console::service::pe-httpd',{ 'ensure' => 'running' })
 
-  service { '::pe-httpd':
-    ensure => running,
-  }
 
   pe_file_line {'ssl.conf':
     line   => $encryptionmode,
     ensure => present,
-    match  => "^\\s+SSLProtocol\\s+",
+    match  => "^\\s*SSLProtocol\\s*",
     path   => "${confpath}/ssl.conf",
-    notify => Service['::pe-httpd'],
+    before => Exec['restart-pe-webserver'],
   }
 
   pe_file_line {'puppetproxy.conf':
     line   => $encryptionmode,
     ensure => present,
-    match  => "^\\s+SSLProtocol\\s+",
+    match  => "^\\s*SSLProtocol\\s*",
     path   => "${confpath}/puppetproxy.conf",
-    notify => Service['::pe-httpd'],
+    before => Exec['restart-pe-webserver'],
   }
 
   pe_file_line {'puppetdashboard.conf':
     line   => $encryptionmode,
     ensure => present,
-    match  => "^\\s+SSLProtocol\\s+",
+    match  => "^\\s*SSLProtocol\\s*",
     path   => "${confpath}/puppetdashboard.conf",
-    notify => Service['::pe-httpd'],
+    before => Exec['restart-pe-webserver']
+  }
+
+  exec { 'restart-pe-webserver':
+    path    => '/sbin',
+    command => 'service pe-httpd restart',
   }
 }
