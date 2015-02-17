@@ -47,7 +47,11 @@ inherits ensuretls::params {
     section => 'ssl-host',
     setting => 'ssl-protocols',
     value   => $protocol[-1],
-    notify  => Service ['pe-puppetdb'],
+    before  => Exec['restart-puppetdb'],
   }
 
+  exec {'restart-puppetdb':
+    path    => '/sbin',
+    command => 'service pe-puppetdb restart',
+  }
 }
