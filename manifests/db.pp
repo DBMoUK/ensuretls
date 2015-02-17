@@ -51,7 +51,9 @@ inherits ensuretls::params {
   }
 
   exec {'restart-puppetdb':
-    path    => '/sbin',
-    command => 'service pe-puppetdb restart',
+    path        => '/sbin',
+    command     => 'service pe-puppetdb restart',
+    subscribe   => Pe_ini_setting['puppetdb_tlsmode'],
+    refreshonly => true,
   }
 }

@@ -43,9 +43,9 @@ inherits ensuretls::params {
   include stdlib
 
   $confpath='/etc/puppetlabs/httpd/conf.d'
+  $templatepath='/opt/puppet/share/puppet/modules/puppet_enterprise/templates/'
 
   #ensure_resource('service','Puppet_Enterprise::console::service::pe-httpd',{ 'ensure' => 'running' })
-
 
   pe_file_line {'ssl.conf':
     line   => $encryptionmode,
@@ -55,24 +55,26 @@ inherits ensuretls::params {
     before => Exec['restart-pe-webserver'],
   }
 
-  pe_file_line {'puppetproxy.conf':
+  pe_file_line {'puppetproxy.conf.erb':
     line   => $encryptionmode,
     ensure => present,
     match  => "^\\s*SSLProtocol\\s*",
-    path   => "${confpath}/puppetproxy.conf",
+    path   => "${templatepath}profile/console-services/puppetproxy.conf.erb",
     before => Exec['restart-pe-webserver'],
   }
 
-  pe_file_line {'puppetdashboard.conf':
+  pe_file_line {'puppetdashboard.conf.erb':
     line   => $encryptionmode,
     ensure => present,
     match  => "^\\s*SSLProtocol\\s*",
-    path   => "${confpath}/puppetdashboard.conf",
+    path   => "${templatepath}console/puppetdashboard.conf.erb",
     before => Exec['restart-pe-webserver']
   }
 
   exec { 'restart-pe-webserver':
-    path    => '/sbin',
-    command => 'service pe-httpd restart',
-  }
+    path        => '/sbin',
+    command     => 'service pe-httpd restart',
+    subscribe   => Pe_File_Line['ssl.conf','puppetproxy.conf.erb','puppetdashboard.conf.erb'],
+    refreshonly => true,
+  } 
 }
