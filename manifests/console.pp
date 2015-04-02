@@ -45,8 +45,6 @@ inherits ensuretls::params {
   $confpath='/etc/puppetlabs/httpd/conf.d'
   $templatepath='/opt/puppet/share/puppet/modules/puppet_enterprise/templates/'
 
-  #ensure_resource('service','Puppet_Enterprise::console::service::pe-httpd',{ 'ensure' => 'running' })
-
   pe_file_line {'ssl.conf':
     line   => $encryptionmode,
     ensure => present,
